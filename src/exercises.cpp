@@ -21,14 +21,39 @@ void exercise_1()
 {
     int characters = 0, words = 0, lines = 0;
     char c;
-    bool in_word = false;
-    bool non_empty = false;
+    bool in_word = false; // Tracks when in a word
+    bool non_empty = false; // Tracks if input is non-empty
 
     std::cout << "Type some text to analyse, press ctrl+D/ctrl+Z to stop:\n\n";
 
-    while (std::cin.get(c))
-    {      
-       // Your solution here
+    while (std::cin.get(c)) {   
+        // If input is non-empty, set non_empty to true
+        if (!non_empty && (c != '\n' && c != '\t' && c != ' ')) {
+            non_empty = true;
+            lines = 1;
+        }
+
+        // Character counting (excluding spaces, tabs, and newlines)
+        if (c != ' ' && c != '\t' && c != '\n') {
+            characters++;
+        }
+
+        // Word counting (detecting word boundaries)
+        if (c == ' ' || c == '\t' || c == '\n') {
+            if (in_word) {
+                in_word = false;
+            }
+        } else {
+            if (!in_word) {
+                words++;
+                in_word = true;  // Start of a new word
+            }
+        }
+
+        // Line counting
+        if (c == '\n') {
+            lines++;
+        }
     }
 
     std::cout << "\nNumber of characters: " << characters << '\n';
@@ -49,6 +74,42 @@ void exercise_2()
     bool non_empty = false;
 
     std::cout << "Type some text to analyse, press ctrl+D/ctrl+Z to stop:\n\n";
+
+    do {
+
+        if (!std::cin.get(c)){
+            break;
+        }
+
+
+        // If input is non-empty, set non_empty to true
+        if (!non_empty && (c != '\n' && c != '\t' && c != ' ')) {
+            non_empty = true;
+            lines = 1;
+        }
+
+        // Character counting (excluding spaces, tabs, and newlines)
+        if (c != ' ' && c != '\t' && c != '\n') {
+            characters++;
+        }
+
+        // Word counting (detecting word boundaries)
+        if (c == ' ' || c == '\t' || c == '\n') {
+            if (in_word) {
+                in_word = false;
+            }
+        } else {
+            if (!in_word) {
+                words++;
+                in_word = true;  // Start of a new word
+            }
+        }
+
+        // Line counting
+        if (c == '\n') {
+            lines++;
+        }
+    }   while (!std::cin.eof());  // Continue until EOF is reached, EOF is input stream, just checks if input is finished rather than iterating through input again
 
     // Your solution here
 
@@ -71,13 +132,48 @@ void exercise_3()
 
     std::cout << "Type some text to analyse, press ctrl+D/ctrl+Z to stop:\n\n";
 
-    // Your solution here
+    while (std::cin.get(c)) {   
+        // If input is non-empty, set non_empty to true
+        if (!non_empty && (c != '\n' && c != '\t' && c != ' ')) {
+            non_empty = true;
+            lines = 1;
+        }
 
+        // Use switch statement
+
+        switch(c){
+            case ' ':
+            case '\t':
+            case '\n':
+                if(in_word){
+                    in_word = false;
+                
+                }
+
+                if (c == '\n'){
+                    lines++;
+                }
+                break;
+
+            default:
+                characters++;
+
+                if (!in_word){
+                    words++;
+                    in_word = true;
+                }
+
+                break;
+        }
+
+    }
     std::cout << "\nNumber of characters: " << characters << '\n';
     std::cout << "Number of words: " << words << '\n';
     std::cout << "Number of lines: " << lines << '\n';
 }
 
+
+    
 /*
 Exercise 4:
 Write a C++ function that prints two columns on the screen with the temperature in degrees Fahrenheit (left column)
@@ -94,14 +190,30 @@ Use std::setw(10) to set the output width before printing each temperature.
 */
 void exercise_4(unsigned int number_of_steps, double step_size, double lower_lim)
 {
-    double upper_lim = step_size * (number_of_steps - 1) + lower_lim;
-
     std::cout << std::setw(10) << "Fahrenheit" << std::setw(10) << "Celsius" << '\n';
+
+    double upper_lim = step_size * (number_of_steps - 1) + lower_lim;
 
     double fahrenheit = lower_lim;
 
-    // Your solution here
+    std::cout << std::fixed << std::setprecision(1);
+
+    while (fahrenheit <= upper_lim){
+
+        double celsius = (fahrenheit - 32.0) * (5.0/9.0);
+
+        //std::cout << std::setw(10) << "Fahrenheit" << fahrenheit << std::setw(10) << "Celsius" << celsius <<  std::endl;]
+
+
+        std::cout << std::setw(10) << fahrenheit << std::setw(10) << celsius <<  std::endl;
+
+        fahrenheit+= step_size;
+
+    }
+
+
 }
+
 
 /*
 Exercise 5:
@@ -113,7 +225,25 @@ void exercise_5(unsigned int number_of_steps, double step_size, double lower_lim
 {
     std::cout << std::setw(10) << "Fahrenheit" << std::setw(10) << "Celsius" << '\n';
 
-    // Your solution here
+    double upper_lim = step_size * (number_of_steps - 1) + lower_lim;
+
+    double fahrenheit = lower_lim;
+
+    std::cout << std::fixed << std::setprecision(1);
+    
+    for(; fahrenheit <= upper_lim; fahrenheit += step_size){
+
+        double celsius = (fahrenheit - 32.0) * (5.0/9.0);
+
+        std::cout << std::setw(10) << fahrenheit << std::setw(10) << celsius <<  std::endl;
+
+
+        //std::cout << std::setw(10) << "Fahrenheit" << fahrenheit 
+        //<< std::setw(10) << "Celsius" << celsius << std::endl;
+
+
+
+    }
 }
 
 /*
@@ -149,6 +279,9 @@ void exercise_6()
 
     while (std::cin.get(c) && c != '\n')
     {
+        if(std::isdigit(c)){
+            total += c - '0'; //we minus 0 which has ascii 48 to recieve the integer values
+        }
         // Your solution here
     }
 
